@@ -1,4 +1,5 @@
 # devops-netology
+'new line'
 
 **/.terraform/*  # игнорировать все вложенные каталоги в terraform
 
