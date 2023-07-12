@@ -1,159 +1,102 @@
-## Задача 1
+##Задача 1
 
-- Опишите основные преимущества применения на практике IaaC-паттернов.
-- Какой из принципов IaaC является основополагающим?
+Сценарий выполнения задачи:
+* создайте свой репозиторий на https://hub.docker.com;
+* выберите любой образ, который содержит веб-сервер Nginx;
+* создайте свой fork образа;
+* реализуйте функциональность: запуск веб-сервера в фоне с индекс-страницей, содержащей HTML-код ниже:
 
-
- ## Ответ 1 
-
-- Опишите основные преимущества применения на практике IaaC-паттернов.
-
-Непрерывная интеграции
-
-разработка ПО , при котором сливаются рабочие ветки в основную , частичная 
-сборка проекта 
-
-Непрерывная доставка
-
-Можно выкатывать изменения небольшими частями ,и в случае неполадок , 
-откататься на старые версии 
-
-Непрерывное развёртывание
- 
-Автоматизация процесса развертывания , что экономит время 
-
-- Какой из принципов IaaC является основополагающим?
-
-Индемпатентность - унифицированное свойство , позволяющее получать 
-ожидаемый результат от выполнения операции
-
-## Задача 2
-
-- Чем Ansible выгодно отличается от других систем управление 
-конфигурациями?
-- Какой, на ваш взгляд, метод работы систем конфигурации более надёжный — 
-push или pull?
-
- ## Ответ 2
-
-- Чем Ansible выгодно отличается от других систем управление 
-конфигурациями?
-
-Низкий пирог входа , нет необходимости устанавливать агента 
-
-- Какой, на ваш взгляд, метод работы систем конфигурации более надёжный — 
-push или pull?
-
- Push т.к. потому что мы можем центролезованно накатывать конфигурации по 
-образу 
-
-Например;
-В Ansible это происходит по хостам заданных в HOSTS 
-
-## Задача 3
-
-Установите на личный компьютер:
-
-- [VirtualBox](https://www.virtualbox.org/),
-- [Vagrant](https://github.com/netology-code/devops-materials),
-- [Terraform](https://github.com/netology-code/devops-materials/blob/master/README.md),
-- Ansible.
-
-*Приложите вывод команд установленных версий каждой из программ, 
-оформленный в Markdown.*
-
- ## Ответ 2
-
-- [VirtualBox](https://www.virtualbox.org/),
-
-7.0.8r156879
-
-- [Vagrant](https://github.com/netology-code/devops-materials),
-
-Vagrant 2.3.7
-
-- [Terraform](https://github.com/netology-code/devops-materials/blob/master/README.md),
-
-Terraform v1.5.2
-on darwin_amd64
-
-- Ansible.
-
-ansible [core 2.15.1]
-  config file = None
-  configured module search path = 
-['/Users/aleksandrodincov/.ansible/plugins/modules', 
-'/usr/share/ansible/plugins/modules']
-  ansible python module location = 
-/usr/local/Cellar/ansible/8.1.0/libexec/lib/python3.11/site-packages/ansible
-  ansible collection location = 
-/Users/aleksandrodincov/.ansible/collections:/usr/share/ansible/collections
-  executable location = /usr/local/bin/ansible
-  python version = 3.11.4 (main, Jun 20 2023, 16:51:49) [Clang 14.0.0 
-(clang-1400.0.29.202)] 
-(/usr/local/Cellar/ansible/8.1.0/libexec/bin/python3.11)
-  jinja version = 3.1.2
-  libyaml = True
-
-## Задача 4 
-
-Воспроизведите практическую часть лекции самостоятельно.
-
-- Создайте виртуальную машину.
-- Зайдите внутрь ВМ, убедитесь, что Docker установлен с помощью команды
 ```
-docker ps,
-```
-Vagrantfile из лекции и код ansible находятся в 
-[папке](https://github.com/netology-code/virt-homeworks/tree/virt-11/05-virt-02-iaac/src).
-
-Примечание. Если Vagrant выдаёт ошибку:
-```
-URL: ["https://vagrantcloud.com/bento/ubuntu-20.04"]     
-Error: The requested URL returned error: 404:
+<html>
+<head>
+Hey, Netology
+</head>
+<body>
+<h1>I’m DevOps Engineer!</h1>
+</body>
+</html>
 ```
 
-выполните следующие действия:
+Опубликуйте созданный fork в своём репозитории и предоставьте ответ в виде ссылки на https://hub.docker.com/username_repo.
 
-1. Скачайте с [сайта](https://app.vagrantup.com/bento/boxes/ubuntu-20.04) 
-файл-образ "bento/ubuntu-20.04".
-2. Добавьте его в список образов Vagrant: "vagrant box add 
-bento/ubuntu-20.04 <путь к файлу>".
+##Ответ1
 
 
-## Ответ 4 
+https://hub.docker.com/repository/docker/aleksandrodintsov/ngingx10/general
+
+
+##Задача 2
+
+
+Посмотрите на сценарий ниже и ответьте на вопрос: «Подходит ли в этом сценарии использование Docker-контейнеров или лучше подойдёт 
+виртуальная машина, физическая машина? Может быть, возможны разные варианты?»
+Детально опишите и обоснуйте свой выбор.
+--
+Сценарий:
+* высоконагруженное монолитное Java веб-приложение;  
+* Nodejs веб-приложение;
+* мобильное приложение c версиями для Android и iOS;  
+* шина данных на базе Apache Kafka;
+* Elasticsearch-кластер для реализации логирования продуктивного веб-приложения 
+* мониторинг-стек на базе Prometheus и Grafana;
+* MongoDB как основное хранилище данных для Java-приложения;
+* Gitlab-сервер для реализации CI/CD-процессов и приватный (закрытый) Docker Registry.
+
+##Ответ2
+
+Сценарий:
+* высоконагруженное монолитное Java веб-приложение  ;
+
+ физическая машина т.к. монолитное приложение ,к тому же будут потребляться значительные ресурсы при работе ;
+
+* Nodejs веб-приложение;
+
+Docker-контейнеры т.к. не нужно устаналивать ОС ( что снизит нарузку) , в случае большой нагрузки можно масштабировать ;
+
+* мобильное приложение c версиями для Android и iOS;
+
+Docker-контейнеры потому что  в работе не будут пересикаться(изалированны) , так же можно масштабировать в случае увеличения нагрузки  ;
+
+* шина данных на базе Apache Kafka;
+
+Кластер из Docker-контейнеров что бы обеспечить хорошую производительность и отказоустойчивость;
+
+* Elasticsearch-кластер для реализации логирования продуктивного веб-приложения — три ноды elasticsearch, два logstash и две ноды kibana;
+
+Кластер из Docker-контейнеров потому что  будут производиться логирование  3х различных программ ;
+
+* мониторинг-стек на базе Prometheus и Grafana;
+
+Кластер из Docker-контейнеров потому что  будут производиться логирование  2х различных программ ;
+
+* MongoDB как основное хранилище данных для Java-приложения;
+
+Физициская машина с RAID массивом или контейнер с внешним Volium RAID ;
+
+* Gitlab-сервер для реализации CI/CD-процессов и приватный (закрытый) Docker Registry.
+
+Docker-контейнеры т.к. взаимодействия могут происходить в Docker Networks  и не использовать внешнюю машрутизацию , так же 
+масштабируемость ;
+
+##Задача 3
+
+* Запустите первый контейнер из образа centos c любым тегом в фоновом режиме, подключив папку /data из текущей рабочей директории на 
+хостовой машине в /data контейнера.
+* Запустите второй контейнер из образа debian в фоновом режиме, подключив папку /data из текущей рабочей директории на хостовой 
+машине в /data контейнера.
+* Подключитесь к первому контейнеру с помощью docker exec и создайте текстовый файл любого содержания в /data.
+* Добавьте ещё один файл в папку /data на хостовой машине.
+* Подключитесь во второй контейнер и отобразите листинг и содержание файлов в /data контейнера.
+##Ответ3
+
 ```
-vagrant@server1:~$ sudo docker ps
+root@6e0cbe476640:/date# ls
+test.txt  test2.txt
+root@6e0cbe476640:/date# cat test.txt
+first line
+root@6e0cbe476640:/date# cat test2.txt
+host_machen
 
-CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
-
-vagrant@server1:~$ sudo docker version
-
-Client: Docker Engine - Community
- Version:           24.0.2
- API version:       1.43
- Go version:        go1.20.4
- Git commit:        cb74dfc
- Built:             Thu May 25 21:52:13 2023
- OS/Arch:           linux/amd64
- Context:           default
-
-Server: Docker Engine - Community
- Engine:
-  Version:          24.0.2
-  API version:      1.43 (minimum version 1.12)
-  Go version:       go1.20.4
-  Git commit:       659604f
-  Built:            Thu May 25 21:52:13 2023
-  OS/Arch:          linux/amd64
-  Experimental:     false
- containerd:
-  Version:          1.6.21
-  GitCommit:        3dce8eb055cbb6872793272b4f20ed16117344f8
- runc:
-  Version:          1.1.7
-  GitCommit:        v1.1.7-0-g860f061
- docker-init:
-  Version:          0.19.0
-  GitCommit:        de40ad0
 ```
+
+
