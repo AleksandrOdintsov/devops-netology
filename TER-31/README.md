@@ -8,7 +8,7 @@
 
 
 <p align="center">
-  <img width="1200" height="600" src="./Version.png">
+  <img width="600" height="300" src="./Version.png">
 </p>
 
 ### Задание 1
@@ -92,6 +92,10 @@ shekeriev.
 
 
 ### Ответ 2
+
+<p align="center">
+  <img width="600" height="300" src="./1.2.png">
+</p>
 ``````
 Redmi-Note-8-Pro:2.1 aleksandrodincov$ terraform plan 
 
