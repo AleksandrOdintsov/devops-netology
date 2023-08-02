@@ -28,18 +28,45 @@ variable "default_cidr" {
 variable "vpc_name" {
   type        = string
   default     = "develop"
-  description = "VPC network & subnet name"
+  description = "VPC network&subnet name"
+
+  
 }
-
-
 ###ssh vars
-variable "ssh" {
-type = map
-default = {
-serial-port-enable = 1
-ssh-keys           = "ubuntu:ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIHuz1IzMPicCiMQVtPWUFNjqmWeiR3BEOxkExmjr5CQ5 aleksandrodincov@Redmi-Note-8-Pro.local"
+variable "public_key" {
+  type    = string
+  default = ""
 }
+  
+variable "vm_resources"{
+type = list(object(
+    {
+    name        = string
+    platform_id  = string
+    cores        = number
+    memory        = number
+    core_fraction = number
+    type          = string
+    size        = number
+    }))
+      default = [
+    { 
+    name        = "main"
+    platform_id = "standard-v1"
+    cores        = 2
+    memory        = 2
+    core_fraction = 20
+    type          = "network-hdd"
+    size        = 7
+    },
+    {
+     name       = "replica"
+    platform_id = "standard-v1"
+    cores        = 2
+    memory        = 1
+    core_fraction = 5
+    type          = "network-hdd"
+    size        = 5
+    }
+  ]
 }
-
-
-
