@@ -29,44 +29,10 @@ variable "vpc_name" {
   type        = string
   default     = "develop"
   description = "VPC network&subnet name"
-
-  
 }
+
 ###ssh vars
 variable "public_key" {
   type    = string
   default = ""
-}
-  
-variable "vm_resources"{
-type = list(object(
-    {
-    name        = string
-    platform_id  = string
-    cores        = number
-    memory        = number
-    core_fraction = number
-    type          = string
-    size        = number
-    }))
-      default = [
-    { 
-    name        = "main"
-    platform_id = "standard-v1"
-    cores        = 2
-    memory        = 2
-    core_fraction = 20
-    type          = "network-hdd"
-    size        = 7
-    },
-    {
-     name       = "replica"
-    platform_id = "standard-v1"
-    cores        = 2
-    memory        = 1
-    core_fraction = 5
-    type          = "network-hdd"
-    size        = 5
-    }
-  ]
 }
