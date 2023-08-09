@@ -59,6 +59,7 @@ module "vpc_dev" {
 <p align="center">
   <img width="694" height="176" src="./module.vpc_dev.png">
 </p>
+
 4. Замените ресурсы yandex_vpc_network и yandex_vpc_subnet созданным модулем. Не забудьте передать необходимые параметры сети из модуля vpc в модуль с виртуальной машиной.
 ```
 Redmi-Note-8-Pro:demonstration1 aleksandrodincov$ terraform state list
@@ -70,7 +71,7 @@ module.test-vm.yandex_compute_instance.vm[0]
 module.test-vm.yandex_compute_instance.vm[1]
 ```
 
-````
+```
 Redmi-Note-8-Pro:demonstration1 aleksandrodincov$ terraform state list
 data.template_file.cloudinit
 module.test-vm.data.yandex_compute_image.my_image
@@ -113,7 +114,7 @@ Removed module.test-vm.data.yandex_compute_image.my_image
 Removed module.test-vm.yandex_compute_instance.vm[0]
 Removed module.test-vm.yandex_compute_instance.vm[1]
 Successfully removed 3 resource instance(s).
-``````
+```
 4. Импортируйте всё обратно. Проверьте terraform plan. Изменений быть не должно.
 Приложите список выполненных команд и скриншоты процессы.
 ```
