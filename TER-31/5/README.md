@@ -183,3 +183,27 @@ Password:
 3. Откройте новый pull request 'terraform-hotfix' --> 'terraform-05'. 
 4. Вставьте в комментарий PR результат анализа tflint и checkov, план изменений инфраструктуры из вывода команды terraform plan.
 5. Пришлите ссылку на PR для ревью. Вливать код в 'terraform-05' не нужно.
+[Pull Request 'terraform-hotfix' --> 'terraform-05'](https://github.com/AleksandrOdintsov/devops-netology/pull/1)
+
+### Задание 4
+
+1. Напишите переменные с валидацией и протестируйте их, заполнив default верными и неверными значениями. Предоставьте скриншоты проверок из terraform console. 
+
+- type=string, description="ip-адрес" — проверка, что значение переменной содержит верный IP-адрес с помощью функций cidrhost() или regex(). Тесты:  "192.168.0.1" и "1920.1680.0.1"
+
+<p align="center">
+  <img width="1200" height="492" src="./valid_ip.png">
+</p>
+<p align="center">
+  <img width="1200" height="590" src="./invalid_ip.png">
+</p>
+
+
+
+- type=list(string), description="список ip-адресов" — проверка, что все адреса верны. Тесты:  ["192.168.0.1", "1.1.1.1", "127.0.0.1"] и ["192.168.0.1", "1.1.1.1", "1270.0.0.1"].
+<p align="center">
+  <img width="1200" height="582" src="./valid_pool_ip.png">
+</p>
+<p align="center">
+  <img width="1200" height="562" src="./invalid_pool_ip.png">
+</p>
