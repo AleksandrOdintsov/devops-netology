@@ -16,7 +16,7 @@ backend "s3" {
   skip_region_validation      = true
   skip_credentials_validation = true
 
-  dynamobd_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gk9numsd7mrc6eaphb/etndocsf83n7ra9vbfhb"
+  dynamodb_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gk9numsd7mrc6eaphb/etndocsf83n7ra9vbfhb"
   dynamodb_table    = "tflock-develop"
 }
 }

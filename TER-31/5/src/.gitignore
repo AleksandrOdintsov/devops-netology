@@ -14,3 +14,9 @@ personal.auto.tfvars
 
 #ansible
 *.cfg
+
+#ansible
+*.cfg
+
+#tfplan 
+tfplan

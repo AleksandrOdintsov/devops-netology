@@ -121,6 +121,65 @@ yandex service account
 
  Предоставьте скриншоты процесса в качестве ответа.
 3. Закоммитьте в ветку 'terraform-05' все изменения.
+```
+Redmi-Note-8-Pro:TER-31 aleksandrodincov$ sudo git commit -m "Taks 2"
+[terraform-05 c298847] Taks 2
+ 28 files changed, 149 insertions(+), 206 deletions(-)
+```
 4. Откройте в проекте terraform console, а в другом окне из этой же директории попробуйте запустить terraform apply.
 5. Пришлите ответ об ошибке доступа к state.
-6. Принудительно разблокируйте state. Пришлите команду и вывод.
+
+```
+Redmi-Note-8-Pro:src aleksandrodincov$ terraform apply
+Acquiring state lock. This may take a few moments...
+╷
+│ Error: Error acquiring the state lock
+│ 
+│ Error message: ConditionalCheckFailedException: Condition not satisfied
+│ Lock Info:
+│   ID:        86de7eef-e059-3839-b672-3bff97ddc8ae
+│   Path:      tfstate-homework5/terraform.tfstate
+│   Operation: OperationTypeInvalid
+│   Who:       aleksandrodincov@Redmi-Note-8-Pro.local
+│   Version:   1.5.2
+│   Created:   2023-08-13 12:03:44.066092 +0000 UTC
+│   Info:      
+│ 
+│ 
+│ Terraform acquires a state lock to protect the state from being written
+│ by multiple users at the same time. Please resolve the issue above and try
+│ again. For most commands, you can disable locking with the "-lock=false"
+│ flag, but this is not recommended.
+```
+6. Принудительно разблокируйте state. 
+Пришлите команду
+```
+terraform force-unlock 86de7eef-e059-3839-b672-3bff97ddc8ae
+``` 
+и вывод.
+```
+Do you really want to force-unlock?
+  Terraform will remove the lock on the remote state.
+  This will allow local Terraform commands to modify this state, even though it
+  may still be in use. Only 'yes' will be accepted to confirm.
+
+  Enter a value: yes
+
+Terraform state has been successfully unlocked!
+
+The state has been unlocked, and Terraform commands should now be able to
+obtain a new lock on the remote state.
+``
+
+### Задание 3  
+
+1. Сделайте в GitHub из ветки 'terraform-05' новую ветку 'terraform-hotfix'.
+```
+Redmi-Note-8-Pro:TER-31 aleksandrodincov$ sudo git switch -c terraform-hotfix
+Password:
+Переключились на новую ветку «terraform-hotfix»
+```
+2. Проверье код с помощью tflint и checkov, исправьте все предупреждения и ошибки в 'terraform-hotfix', сделайте коммит.
+3. Откройте новый pull request 'terraform-hotfix' --> 'terraform-05'. 
+4. Вставьте в комментарий PR результат анализа tflint и checkov, план изменений инфраструктуры из вывода команды terraform plan.
+5. Пришлите ссылку на PR для ревью. Вливать код в 'terraform-05' не нужно.
