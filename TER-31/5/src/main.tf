@@ -5,6 +5,20 @@ terraform {
     }
   }
   required_version = ">=0.13"
+
+ 
+backend "s3" {
+  endpoint   = "storage.yandexcloud.net"
+  bucket     = "tfstate-homework5"
+  region     = "ru-central1"
+  key        = "terraform.tfstate"
+
+  skip_region_validation      = true
+  skip_credentials_validation = true
+
+  dynamobd_endpoint = "https://docapi.serverless.yandexcloud.net/ru-central1/b1gk9numsd7mrc6eaphb/etndocsf83n7ra9vbfhb"
+  dynamodb_table    = "tflock-develop"
+}
 }
 
 provider "yandex" {
@@ -14,20 +28,6 @@ provider "yandex" {
   zone      = var.default_zone
 }
 
-/*
-#создаем облачную сеть
-resource "yandex_vpc_network" "develop" {
-  name = "develop"
-}
-
-#создаем подсеть
-resource "yandex_vpc_subnet" "develop" {
-  name           = "develop-ru-central1-a"
-  zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.develop.id
-  v4_cidr_blocks = ["10.0.1.0/24"]
-}
-*/
 module "vpc_dev" {
   source       = "./vpc"
   vpc_name        = "net"
