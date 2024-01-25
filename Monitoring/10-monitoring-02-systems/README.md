@@ -49,7 +49,7 @@
 
 Формула должна выглядить следующем образом 
 
-summ_2xx_requests/(summ_2xx_requests+umm_5xx_requests+umm_4xx_requests )
+summ_2xx_requests/(summ_2xx_requests+summ_5xx_requests+summ_4xx_requests )
 
 #
 5. Опишите основные плюсы и минусы pull и push систем мониторинга.
