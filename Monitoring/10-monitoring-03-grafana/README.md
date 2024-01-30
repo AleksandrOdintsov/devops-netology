@@ -12,7 +12,7 @@
 
 
 <p align="center">
-  <img width="" height="" src="./scrn/1.png">
+  <img width="" height="" src="./scr/1.png">
 </p>
 
 ## Задание 2
@@ -40,7 +40,8 @@
 
 ``` avg(node_load1)
     avg(node_load5)
-    avg(node_load15)```
+    avg(node_load15)
+```
 
 - количество свободной оперативной памяти;
 
@@ -51,7 +52,7 @@
 ``` node_filesystem_avail_bytes{device="/dev/vda1",instance="nodeexporter:9100",job="nodeexporter",mountpoint="/var/lib"}```
 
 <p align="center">
-  <img width="" height="" src="./scrn/2.png">
+  <img width="" height="" src="./scr/2.png">
 </p>
 
 ## Задание 3
@@ -60,7 +61,7 @@
 1. В качестве решения задания приведите скриншот вашей итоговой Dashboard.
 
 <p align="center">
-  <img width="" height="" src="./scrn/3.png">
+  <img width="" height="" src="./scr/3.png">
 </p>
 
 ## Задание 4
@@ -68,4 +69,4 @@
 1. Сохраните ваш Dashboard.Для этого перейдите в настройки Dashboard, выберите в боковом меню «JSON MODEL». Далее скопируйте отображаемое json-содержимое в отдельный файл и сохраните его.
 1. В качестве решения задания приведите листинг этого файла.
 
-[Dashboard](./Dashboaed/Dashboaed.json) 
+[Dashboard](./Dashboard/Dashboaed.json) 
