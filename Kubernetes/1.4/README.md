@@ -35,6 +35,7 @@ spec:
   <img width="" height="" src="./scr/1.png">
 </p>
 2. Создать Service, который обеспечит доступ внутри кластера до контейнеров приложения из п.1 по порту 9001 — nginx 80, по 9002 — multitool 8080.
+
 ```
 apiVersion: v1
 kind: Service
@@ -53,6 +54,7 @@ spec:
       port: 9002
       targetPort: 8080
 ```
+
 <p align="center">
   <img width="" height="" src="./scr/2.png">
 </p>
@@ -106,6 +108,10 @@ spec:
 
 <p align="center">
   <img width="" height="" src="./scr/7.png">
+</p>
+
+<p align="center">
+  <img width="" height="" src="./scr/8.png">
 </p>
 
 3. Предоставить манифест и [Service](/files/svc_nodeport.yaml) в решении, а также скриншоты или вывод команды п.2.
