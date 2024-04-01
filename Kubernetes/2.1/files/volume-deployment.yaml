@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-deployment
+spec:
+  selector:
+    matchLabels:
+      app: volume
+  template:
+    metadata:
+      labels:
+        app: volume
+    spec:
+      сontainers:
+        - name: busybox
+          image: busybox
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "while true; do date >> /data/output.txt; sleep 5; done",
+            ]
+          volumeMounts:
+            - name: my-volume
+              mountPath: /data
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          command: ["/bin/sh", "-c", "tail -f /data/output.txt"]
+          volumeMounts:
+            - name: my-volume
+              mountPath: /data
+      volumes:
+        - name: my-volume
+          emptyDir: {}

@@ -107,5 +107,57 @@ spec:
   <img width="" height="" src="./scr/5.png">
 </p>
 2. Создать Ingress, обеспечивающий доступ снаружи по IP-адресу кластера MicroK8S так, чтобы при запросе только по адресу открывался _frontend_ а при добавлении /api - _backend_.
+```
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-apps
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: microk8s.odincov.ru
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-frontend
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: svc-backend
+                port:
+                  number: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingress
+spec:
+  selector:
+    name: nginx-ingress-microk8s
+  type: LoadBalancer
+  loadBalancerIP: 192.168.0.216
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 443
+
+```
+
 3. Продемонстрировать доступ с помощью браузера или `curl` с локального компьютера.
+<p align="center">
+  <img width="" height="" src="./scr/6.png">
+</p>
 4. Предоставить манифесты и скриншоты или вывод команды п.2.
