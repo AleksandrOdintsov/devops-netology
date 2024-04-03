@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: volume-deployment
+  labels:
+    app: volume
 spec:
   selector:
     matchLabels:
@@ -11,7 +13,7 @@ spec:
       labels:
         app: volume
     spec:
-      сontainers:
+      containers:
         - name: busybox
           image: busybox
           command:
@@ -23,7 +25,6 @@ spec:
           volumeMounts:
             - name: my-volume
               mountPath: /data
-      containers:
         - name: multitool
           image: wbitt/network-multitool
           command: ["/bin/sh", "-c", "tail -f /data/output.txt"]
