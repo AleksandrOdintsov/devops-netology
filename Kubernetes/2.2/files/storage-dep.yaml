@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage-deployment
+  namespace: lesson6
+  labels:
+    app: storage
+spec:
+  selector:
+    matchLabels:
+      app: storage
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      containers:
+        - name: busybox
+          image: busybox
+          command:
+            [
+              "/bin/sh",
+              "-c",
+              "while true; do date >> /data/output.txt; sleep 5; done",
+            ]
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+        - name: multitool
+          image: wbitt/network-multitool
+          command: ["/bin/sh", "-c", "tail -f /data/output.txt"]
+          volumeMounts:
+            - name: storage
+              mountPath: /data
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: pvc-manual

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: daemon-set-pod
+  labels:
+    app: volume
+spec:
+  selector:
+    matchLabels:
+      app: volume
+  template:
+    metadata:
+      labels:
+        app: volume
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          volumeMounts:
+            - name: syslog
+              mountPath: /syslog
+      volumes:
+        - name: syslog
+          hostPath:
+            path: /var/log/syslog
