@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-nginx
+  namespace: lesson7
+  labels:
+    app: tls-ingress
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tls-ingress
+  template:
+    metadata:
+      labels:
+        app: tls-ingress
+    spec:
+      containers:
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-page
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: nginx-page
+          configMap:
+            name: nginx-page
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-page
+  namespace: lesson7
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <h1>Second task DONE HTML</h1>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-nginx
+  namespace: lesson7
+spec:
+  selector:
+    app: tls-ingress
+  ports:
+    - name: nginx-port
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

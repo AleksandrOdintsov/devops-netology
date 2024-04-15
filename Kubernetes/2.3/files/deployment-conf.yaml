@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-conf
+  namespace: lesson7
+  labels:
+    app: configuration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configuration
+  template:
+    metadata:
+      labels:
+        app: configuration
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          ports:
+            - containerPort: 80
+        - name: nginx
+          image: nginx
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+            - name: nginx-conf
+              mountPath: /usr/share/nginx/html
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  namespace: lesson7
+data:
+  nginx.conf: |
+    server {
+      listen 8080;
+      server_name localhost;
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+      }
+    }
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <body>
+    <h1>First task DONE HTML</h1>
+    </body>
+    </html>
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-conf-deployment
+  namespace: lesson7
+spec:
+  selector:
+    app: configuration
+  ports:
+    - name: multitool-port
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: nginx-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
