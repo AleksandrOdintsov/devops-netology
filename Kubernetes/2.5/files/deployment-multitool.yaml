@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-multitool
+  namespace: lesson7
+  labels:
+    app: configuration
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configuration
+  template:
+    metadata:
+      labels:
+        app: configuration
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool:minimal
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-conf-deployment
+  namespace: lesson7
+spec:
+  selector:
+    app: configuration
+  ports:
+    - name: multitool-port
+      protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP
