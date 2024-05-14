@@ -17,7 +17,7 @@ resource "yandex_compute_instance" "master" {
     }
   }
   scheduling_policy {
-    preemptible = true
+    preemptible = false
   }
   network_interface {
     subnet_id = yandex_vpc_subnet.develop.id

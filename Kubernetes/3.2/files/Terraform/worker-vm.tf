@@ -2,7 +2,7 @@ resource "yandex_compute_instance" "worker" {
     name        = "worker-${count.index + 1}"
   platform_id = "standard-v1"
   
-  count = 4
+  count = 2
 
   resources {
     cores  = 2
@@ -23,7 +23,7 @@ resource "yandex_compute_instance" "worker" {
       serial-port-enable = 1
   }
 
-  scheduling_policy { preemptible = true }
+  scheduling_policy { preemptible = false }
 
   network_interface { 
     subnet_id = yandex_vpc_subnet.develop.id

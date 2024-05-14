@@ -2,30 +2,20 @@ all:
     hosts:
         node1:
         
-            ansible_host: 158.160.63.22
-            ip: 10.0.1.24
-            access_ip: 158.160.63.22
+            ansible_host: 51.250.6.182
+            ip: 10.0.1.8
+            access_ip: 51.250.6.182
         
         
         node2:
-            ansible_host: 158.160.112.126
+            ansible_host: 62.84.113.241
             ip: 10.0.1.25
-            access_ip: 158.160.112.126
+            access_ip: 62.84.113.241
         
         node3:
-            ansible_host: 51.250.69.228
-            ip: 10.0.1.21
-            access_ip: 51.250.69.228
-        
-        node4:
-            ansible_host: 158.160.120.202
-            ip: 10.0.1.16
-            access_ip: 158.160.120.202
-        
-        node5:
-            ansible_host: 158.160.122.32
-            ip: 10.0.1.32
-            access_ip: 158.160.122.32
+            ansible_host: 51.250.3.107
+            ip: 10.0.1.29
+            access_ip: 51.250.3.107
         
     children:
         kube_control_plane:

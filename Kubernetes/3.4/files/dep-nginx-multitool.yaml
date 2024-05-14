@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-conf
+  namespace: lesson13
+  labels:
+    app: update
+spec:
+  replicas: 5
+  revisionHistoryLimit: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: update
+  template:
+    metadata:
+      labels:
+        app: update
+    spec:
+      containers:
+        - name: multitool
+          image: wbitt/network-multitool
+          ports:
+            - containerPort: 80
+        - name: nginx
+          image: nginx:1.20
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+          env:
+            - name: HTTP_PORT
+              value: "8080"
+      volumes:
+        - name: nginx-conf
+          configMap:
+            name: nginx-conf
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+  namespace: lesson13
+data:
+  nginx.conf: |
+    server {
+      listen 8080;
+      server_name localhost;
+
+      location / {
+        root /usr/share/nginx/html;
+        index index.html;
+      }
+    }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-conf-deployment
+  namespace: lesson13
+spec:
+  selector:
+    app: update
+  ports:
+    - name: multitool-port
+      protocol: TCP
+      port: 80
+      targetPort: 80
+    - name: nginx-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: ClusterIP
