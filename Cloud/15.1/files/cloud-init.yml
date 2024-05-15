@@ -10,11 +10,3 @@ package_update: true
 package_upgrade: false
 packages:
   - net-tools
-  - apt-transport-https
-  - nano
-  - mc
-  - curl
-  - snapd
-
-runcmd:
-  - snap install kubectl --classic
