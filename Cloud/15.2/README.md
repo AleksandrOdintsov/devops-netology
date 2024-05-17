@@ -1,99 +1,200 @@
-# [Домашнее задание к занятию "15.1. Организация сети"](https://github.com/netology-code/clokub-homeworks/blob/clokub-5/15.1/README.md)
+# [«Вычислительные мощности. Балансировщики нагрузки»  ](https://github.com/netology-code/clopro-homeworks/blob/main/15.2.md)
 ---
-## Задание 1. Яндекс.Облако (обязательное к выполнению)
+## Задание 1. Yandex Cloud 
 
-1. Создать VPC.
-- Создать пустую VPC. Выбрать зону.
+**Что нужно сделать**
+
+1. Создать бакет Object Storage и разместить в нём файл с картинкой:
+
+ - Создать бакет в Object Storage с произвольным именем (например, _имя_студента_дата_).
+
+Создаем сервисный аккаунт для  Object Storage
+
 ```
-resource "yandex_vpc_network" "vpc" {
-  name = var.vpc_name
+resource "yandex_iam_service_account" "srvac" {
+  name = "srvac"
 }
 ```
-2. Публичная подсеть.
-- Создать в vpc subnet с названием public, сетью 192.168.10.0/24.
-```
-resource "yandex_vpc_subnet" "public" {
-  name           = "public"
-  zone           = var.default_zone
-  network_id     = yandex_vpc_network.vps.id
-  v4_cidr_blocks = var.default_cidr_pub
-}
+
+Назначаем роли сервисному аккаунту для работы с Object Storage
 
 ```
-- Создать в этой подсети NAT-инстанс, присвоив ему адрес 192.168.10.254. В качестве image_id использовать fd80mrhj8fl2oe87o4e1
-
-```
-resource "yandex_compute_instance" "nat" {
-    name        = "nat-subnet-public"
-  platform_id = "standard-v1"
-
-
-resources {
-    cores  = 2
-    memory = 2
-    core_fraction = 20
-  }
-  boot_disk {
-    initialize_params {
-      image_id = data.yandex_compute_image.nat-instance-ubuntu-2204.image_id
-      size = 20
-    }
-  }
-  scheduling_policy {
-    preemptible = false
-  }
-  network_interface {
-    subnet_id = yandex_vpc_subnet.public.id
-    nat       = true
-    ip_address  = "192.168.10.254"
-  }
-  
-
+resource "yandex_resourcemanager_folder_iam_member" "srvac-editor" {
+  folder_id = var.folder_id
+  role      = "storage.editor"
+  member    = "serviceAccount:${yandex_iam_service_account.srvac.id}"
 }
 ```
-- Создать в этой публичной подсети виртуалку с публичным IP и подключиться к ней, убедиться что есть доступ к интернету.
+
+Создаем статический ключ доступа
+
+```
+resource "yandex_iam_service_account_static_access_key" "srvac-static-key" {
+  service_account_id = yandex_iam_service_account.srvac.id
+  description        = "static access key for object storage"
+}
+```
+
+Создаем корзину 
+
+```
+resource "yandex_storage_bucket" "odinsov160524" {
+  access_key    = yandex_iam_service_account_static_access_key.srvac-static-key.access_key
+  secret_key    = yandex_iam_service_account_static_access_key.srvac-static-key.secret_key
+  bucket        = "odinsov160524"
+  acl           = "public-read"
+  force_destroy = "true"
+}
+```
+ - Положить в бакет файл с картинкой.
+ - Сделать файл доступным из интернета.
+```
+ resource "yandex_storage_object" "image-object" {
+  access_key    = yandex_iam_service_account_static_access_key.srvac-static-key.access_key
+  secret_key    = yandex_iam_service_account_static_access_key.srvac-static-key.secret_key
+  bucket        = "odinsov160524"
+  acl           = "public-read"
+  key           = "test.jpeg"
+  source        = "~/devops-netology/Cloud/15.2/scr/test.jpeg"
+  depends_on    = [yandex_storage_bucket.odinsov160524]
+}
+ ```
 <p align="center">
   <img width="" height="" src="./scr/1.png">
 </p>
+2. Создать группу ВМ в public подсети фиксированного размера с шаблоном LAMP и веб-страницей, содержащей ссылку на картинку из бакета:
+
+ - Создать Instance Group с тремя ВМ и шаблоном LAMP. Для LAMP рекомендуется использовать `image_id = fd827b91d99psvq5fjit`.
+для начало создадим сервисный аккаунт для работы Instance Group 
+
+```
+resource "yandex_iam_service_account" "srvac-ig" {
+  name = "srvac-ig"
+}
+
+```
+Назначаем роли сервисному аккаунту для работы с Instance Group 
+
+```
+resource "yandex_resourcemanager_folder_iam_member" "srvac-ig-editor" {
+  folder_id = var.folder_id
+  role      = "editor"
+  member    = "serviceAccount:${yandex_iam_service_account.srvac-ig.id}"
+}
+```
+Создаем Instance Group
+```
+resource "yandex_compute_instance_group" "lamp" {
+  name                = "vm-lamp"
+  folder_id           = var.folder_id
+  service_account_id  = "${yandex_iam_service_account.srvac-ig.id}"
+  deletion_protection = false
+  instance_template {
+    platform_id = var.vm_yandex_compute_instance_standart
+    resources {
+      memory = 2
+      cores  = 2
+    }
+    boot_disk {
+      mode = "READ_WRITE"
+      initialize_params {
+        image_id = "fd827b91d99psvq5fjit"
+        size     = 4
+      }
+          }
+    network_interface {
+      network_id = "${yandex_vpc_network.vps.id}"
+      subnet_ids = ["${yandex_vpc_subnet.public.id}"]
+      nat        = "true"
+    }
+    }
+  }
+```
 
 <p align="center">
   <img width="" height="" src="./scr/2.png">
 </p>
+ - Для создания стартовой веб-страницы рекомендуется использовать раздел `user_data` в [meta_data](https://cloud.yandex.ru/docs/compute/concepts/vm-metadata).
 
-3. Приватная подсеть.
-- Создать в vpc subnet с названием private, сетью 192.168.20.0/24.
 ```
-resource "yandex_vpc_subnet" "private" {
-  name           = "private"
-  zone           = var.default_zone
-  network_id     = yandex_vpc_network.vps.id
-  v4_cidr_blocks = var.default_cidr_priv
-}
-```
-- Создать route table. Добавить статический маршрут, направляющий весь исходящий трафик private сети в NAT-инстанс
-```
-resource "yandex_vpc_route_table" "private-rt" {
-  network_id = yandex_vpc_network.vps.id
-  name              = "private-rt"
-  static_route {
-    destination_prefix  = "0.0.0.0/0"
-    next_hop_address    = yandex_compute_instance.nat.network_interface[0].ip_address
+    metadata = {
+      user-data          = data.template_file.cloudinit.rendered
   }
-}
+```
+ - Разместить в стартовой веб-странице шаблонной ВМ ссылку на картинку из бакета.
 
 ```
-- Создать в этой приватной подсети виртуалку с внутренним IP, подключиться к ней через виртуалку, созданную ранее и убедиться что есть доступ к интернету
+data "template_file" "cloudinit" {
+ template = file("${path.module}/cloud-init.yml")
+ vars = {
+   ssh_public_key = local.ssh-keys
+   ssh_private_key = local.ssh-private-keys
+   image_id = var.image_id
+ }
+}
+```
+
+```
+variable "image_id" {
+  type        = string
+  default     = "https://storage.yandexcloud.net/odinsov160524/test.jpeg"
+}
+```
+
+ - Настроить проверку состояния ВМ.
+
+```
+  health_check {
+    http_options {
+      port = 80
+      path = "/index.html"
+    }
+  }
+
+```
+ 
 <p align="center">
   <img width="" height="" src="./scr/3.png">
 </p>
+3. Подключить группу к сетевому балансировщику:
+
+ - Создать сетевой балансировщик.
+
+```
+resource "yandex_lb_network_load_balancer" "lb" {
+  name = "network-lb"
+
+  listener {
+    name = "lb-listener"
+    port = 80
+    external_address_spec {
+      ip_version = "ipv4"
+    }
+  }
+
+  attached_target_group {
+    target_group_id = yandex_compute_instance_group.lamp.load_balancer.0.target_group_id
+
+    healthcheck {
+      name = "http"
+      http_options {
+        port = 80
+        path = "/index.html"
+      }
+    }
+  }
+  depends_on = [
+    yandex_compute_instance_group.lamp
+]
+}
+```
 <p align="center">
   <img width="" height="" src="./scr/4.png">
 </p>
 
-Resource terraform для ЯО
-- [VPC subnet](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_subnet)
-- [Route table](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/vpc_route_table)
-- [Compute Instance](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/compute_instance)
----
 
+ - Проверить работоспособность, удалив одну или несколько ВМ.
+<p align="center">
+  <img width="" height="" src="./scr/5.png">
+</p>
 
